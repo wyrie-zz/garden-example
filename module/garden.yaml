@@ -1,23 +1,23 @@
-kind: Module
-description: A flask api
-type: container
-name: api
-services:
-  - name: api
-    args: [python, app.py]
-    ingresses:
-      - path: /
-        hostname: api.local.app.garden
-        port: interface
-    ports:
-      - name: interface
-        protocol: TCP
-        containerPort: 8000
-tests:
-  - name: unit
-    command: ["sh", "-c", "curl -Lk -o ping.txt http://api:8000/ping; pwd; ls -la"]
-    artifacts:
-      - source: /opt/app-root/src/ping.txt
-        target: unit-test
-    dependencies:
-      - api
+# kind: Module
+# description: A flask api
+# type: container
+# name: api
+# services:
+#   - name: api
+#     args: [python, app.py]
+#     ingresses:
+#       - path: /
+#         hostname: api.local.app.garden
+#         port: interface
+#     ports:
+#       - name: interface
+#         protocol: TCP
+#         containerPort: 8000
+# tests:
+#   - name: unit
+#     command: ["sh", "-c", "curl -Lk -o ping.txt http://api:8000/ping; pwd; ls -la"]
+#     artifacts:
+#       - source: /opt/app-root/src/ping.txt
+#         target: unit-test
+#     dependencies:
+#       - api

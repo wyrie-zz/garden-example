@@ -1,0 +1,28 @@
+kind: Module
+description: Helm chart for the results UI
+type: helm
+name: result
+base: base-chart
+serviceResource:
+  containerModule: result-image
+  hotReloadArgs: [nodemon, server.js]
+dependencies:
+  - db-init
+  - api
+values:
+  name: result
+  image:
+    repository: ${modules.result-image.outputs.deployment-image-name}
+    tag: ${modules.result-image.version}
+  env:
+    test3: 'ok3'
+    test4: 'ok4'
+  ports:
+    - name: http
+      containerPort: 80
+      protocol: TCP
+tests:
+  - name: integ
+    args: [echo, ok]
+    dependencies:
+      - db-init

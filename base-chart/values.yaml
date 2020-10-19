@@ -1,0 +1,40 @@
+#
+# Deployment
+#
+# spec
+replicaCount: 1
+# spec.template.spec
+annotations: {}
+nodeSelector: {}
+affinity: {}
+securityContext: {}
+tolerations: {}
+enableServiceLinks: false
+# spec.template.spec.containers
+name: "base-chart"
+imagePullPolicy: IfNotPresent
+image:
+  repository: busybox
+  tag: latest
+args: []
+env: {}
+ports: {}
+resources: {}
+livenessProbe: {}
+readinessProbe: {}
+#
+# Service
+#
+service:
+  enabled: true
+  type: "ClusterIP"
+#
+# Ingress
+#
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  paths: []
+  hosts: []
+  tls: []
