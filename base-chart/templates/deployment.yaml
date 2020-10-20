@@ -1,3 +1,4 @@
+{{- $app := index .Values (.Release.Name | replace "-" "_") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,14 +8,14 @@ metadata:
     helm.sh/chart: {{ include "base-chart.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-  {{- with .Values.annotations }}
+  {{- with $app.annotations }}
   annotations:
     {{- range $k, $v := . }}
     {{ $k | quote }}: {{ $v | quote }}
     {{- end -}}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ $app.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "base-chart.name" . }}
@@ -25,51 +26,51 @@ spec:
         app.kubernetes.io/name: {{ include "base-chart.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-    {{- if .Values.nodeSelector }}
+    {{- if $app.nodeSelector }}
       nodeSelector:
-      {{- toYaml .Values.nodeSelector | indent 8 }}
+      {{- toYaml $app.nodeSelector | indent 8 }}
     {{- end }}
-    {{- if .Values.affinity }}
+    {{- if $app.affinity }}
       affinity:
-      {{- toYaml .Values.affinity | indent 8 }}
+      {{- toYaml $app.affinity | indent 8 }}
     {{- end }}
-    {{- if .Values.securityContext }}
+    {{- if $app.securityContext }}
       securityContext:
-      {{- toYaml .Values.securityContext | indent 8 }}
+      {{- toYaml $app.securityContext | indent 8 }}
     {{- end }}
-    {{- if .Values.tolerations }}
+    {{- if $app.tolerations }}
       tolerations:
-      {{- toYaml .Values.tolerations | indent 8 }}
+      {{- toYaml $app.tolerations | indent 8 }}
     {{- end }}
-      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      enableServiceLinks: {{ $app.enableServiceLinks }}
       containers:
         - name: {{ include "base-chart.name" . }}
-          image: "{{ required "Must specify image.repository field in values" .Values.image.repository }}:{{ required "Must specify image.tag field in values" .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
-          {{- with .Values.args }}
+          image: "{{ required "Must specify image.repository field in values" $app.image.repository }}:{{ required "Must specify image.tag field in values" $app.image.tag }}"
+          imagePullPolicy: {{ $app.imagePullPolicy }}
+          {{- with $app.args }}
           args:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.env }}
+          {{- with $app.env }}
           env:
             {{- range $ename, $evalue := . }}
             - name: {{ $ename | quote }}
               value: {{ $evalue | quote }}
             {{- end }}
           {{- end }}
-          {{- with .Values.ports }}
+          {{- with $app.ports }}
           ports:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.resources }}
+          {{- with $app.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.livenessProbe }}
+          {{- with $app.livenessProbe }}
           livenessProbe:
           {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.readinessProbe }}
+          {{- with $app.readinessProbe }}
           readinessProbe:
           {{- toYaml . | nindent 12 }}
           {{- end }}

@@ -12,10 +12,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "base-chart.fullname" -}}
+{{- $app := index .Values (.Release.Name | replace "-" "_") -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := required "Must specify name field in values" .Values.name -}}
+{{- $name := required "Must specify name field in values" $app.name -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}

@@ -8,14 +8,15 @@ serviceResource:
 dependencies:
   - redis
 values:
-  name: api
-  image:
-    repository: ${modules.api-image.outputs.deployment-image-name}
-    tag: ${modules.api-image.version}
-  ports:
-    - name: http
-      containerPort: 80
-      protocol: TCP
-  env:
-    test1: 'ok1'
-    test2: 'ok2'
+  api:
+    name: api
+    image:
+      repository: ${modules.api-image.outputs.deployment-image-name}
+      tag: ${modules.api-image.version}
+    ports:
+      - name: http
+        containerPort: 80
+        protocol: TCP
+    env:
+      test1: 'ok1'
+      test2: 'ok2'
